@@ -1,0 +1,35 @@
+import numpy as np
+from sklearn.linear_model import Perceptron
+import matplotlib.pyplot as plt
+
+# Generar datos de ejemplo
+np.random.seed(42)
+X = np.random.rand(100, 2)  # 100 puntos en 2D
+y = (X[:, 0] + X[:, 1] > 1).astype(int)  # Clasificación basada en una línea diagonal
+
+# Entrenar el perceptrón
+clf = Perceptron()
+clf.fit(X, y)
+
+# Plotear los datos y la línea de separación
+plt.scatter(X[:, 0], X[:, 1], c=y, cmap='viridis')
+ax = plt.gca()
+xlim = ax.get_xlim()
+ylim = ax.get_ylim()
+
+# Crear malla para plotear la línea de separación
+xx, yy = np.meshgrid(np.linspace(xlim[0], xlim[1], 50),
+                     np.linspace(ylim[0], ylim[1], 50))
+Z = clf.decision_function(np.c_[xx.ravel(), yy.ravel()])
+
+# Plotear la línea de separación
+Z = Z.reshape(xx.shape)
+plt.contour(xx, yy, Z, colors='k', levels=[0], linestyles=['--'])
+
+# Configurar el gráfico
+plt.title('Separabilidad Lineal con Perceptrón')
+plt.xlabel('Característica 1')
+plt.ylabel('Característica 2')
+
+# Mostrar el gráfico
+plt.show()
