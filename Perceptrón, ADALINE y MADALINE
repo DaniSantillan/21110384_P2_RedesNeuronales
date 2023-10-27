@@ -52,7 +52,9 @@ for _ in range(10):
     adaline.train(inputs, target)
     print(adaline.predict(inputs))
 
+
 MADALINE:
+
 class Madaline:
     def __init__(self, input_size, output_size, learning_rate=0.1):
         self.weights = np.zeros((output_size, input_size))
