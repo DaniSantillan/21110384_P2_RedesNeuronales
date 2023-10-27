@@ -1,0 +1,17 @@
+import tensorflow as tf
+import numpy as np
+
+# Datos de entrada
+datos_entrada = np.array([[0.5, 0.2]])
+
+# Definir el modelo
+modelo = tf.keras.Sequential([
+    tf.keras.layers.Dense(units=3, input_shape=(2,), activation='relu')  # Capa con función de activación ReLU
+])
+
+# Obtener la salida
+salida = modelo.predict(datos_entrada)
+
+# Imprimir la salida
+print("Datos de entrada:", datos_entrada)
+print("Salida de la red neuronal:", salida)
