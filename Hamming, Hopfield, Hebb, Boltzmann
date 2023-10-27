@@ -1,0 +1,69 @@
+HAMMING:
+
+import numpy as np
+
+def hamming_network(input_pattern, weights):
+    return np.sign(np.dot(input_pattern, weights))
+
+# Ejemplo de uso
+input_pattern = np.array([1, -1, 1])
+weights = np.array([[1, -1, 1], [-1, 1, -1], [1, -1, 1]])
+
+result = hamming_network(input_pattern, weights)
+print("Resultado de la Red de Hamming:", result)
+
+
+HOPFIELD:
+
+import numpy as np
+
+def hopfield_network(input_pattern, weights, max_iterations=100):
+    for _ in range(max_iterations):
+        input_pattern = np.sign(np.dot(weights, input_pattern))
+
+    return input_pattern
+
+# Ejemplo de uso
+input_pattern = np.array([1, -1, 1])
+weights = np.outer(input_pattern, input_pattern)
+
+result = hopfield_network(input_pattern, weights)
+print("Resultado de la Red de Hopfield:", result)
+
+
+HEBB:
+
+import numpy as np
+
+def hebb_rule(inputs):
+    return np.outer(inputs, inputs)
+
+# Ejemplo de uso
+input_pattern1 = np.array([1, -1, 1])
+input_pattern2 = np.array([-1, 1, -1])
+
+weights = hebb_rule(input_pattern1) + hebb_rule(input_pattern2)
+print("Pesos según la Regla de Hebb:", weights)
+
+
+BOLTZMANN:
+
+import numpy as np
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+def boltzmann_network(inputs, weights, temperature=1.0, max_iterations=100):
+    for _ in range(max_iterations):
+        for i in range(len(inputs)):
+            net_input = np.dot(weights[i], inputs)
+            inputs[i] = np.random.choice([-1, 1], p=[sigmoid(net_input/temperature), 1-sigmoid(net_input/temperature)])
+
+    return inputs
+
+# Ejemplo de uso
+input_pattern = np.array([1, -1, 1])
+weights = np.array([[0, 1, -1], [1, 0, -1], [-1, -1, 0]])
+
+result = boltzmann_network(input_pattern, weights)
+print("Resultado de la Red de Boltzmann:", result)
