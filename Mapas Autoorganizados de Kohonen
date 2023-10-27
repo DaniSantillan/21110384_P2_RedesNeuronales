@@ -1,0 +1,38 @@
+from minisom import MiniSom
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Datos de entrada
+data = np.array([[1.0, 2.0, 3.0],
+                 [4.0, 5.0, 6.0],
+                 [7.0, 8.0, 9.0],
+                 [10.0, 11.0, 12.0]])
+
+# Tamaño del mapa SOM
+som_size = (5, 5)
+
+# Crear e inicializar el SOM
+som = MiniSom(som_size[0], som_size[1], data.shape[1], sigma=1.0, learning_rate=0.5)
+som.random_weights_init(data)
+
+# Entrenar el SOM con los datos
+som.train_batch(data, 1000, verbose=True)
+
+# Obtener las etiquetas de las neuronas ganadoras para cada entrada
+winner_coordinates = np.array([som.winner(x) for x in data]).T
+
+# Asignar un color único a cada neurona ganadora
+colors = np.array([[0, 0, 1, 0.8] for _ in range(len(data))])
+for i, (x, y) in enumerate(winner_coordinates.T):
+    colors[x, y] = [1, 0, 0, 0.8]  # Color rojo para la neurona ganadora
+
+# Visualizar el mapa SOM
+plt.figure(figsize=(som_size[0], som_size[1]))
+for x in range(som_size[0]):
+    for y in range(som_size[1]):
+        plt.plot(x + 0.5, y + 0.5, 'o', color=som.weights[x, y], markersize=20)
+
+plt.scatter(winner_coordinates[0] + 0.5, winner_coordinates[1] + 0.5,
+            marker='o', facecolors='none', edgecolors=colors, linewidth=2, s=100)
+
+plt.show()
