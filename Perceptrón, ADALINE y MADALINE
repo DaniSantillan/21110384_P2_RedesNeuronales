@@ -1,0 +1,78 @@
+PERCEPTRON:
+
+import numpy as np
+
+class Perceptron:
+    def __init__(self, input_size, learning_rate=0.1):
+        self.weights = np.zeros(input_size)
+        self.bias = 0
+        self.learning_rate = learning_rate
+
+    def predict(self, inputs):
+        return np.dot(inputs, self.weights) + self.bias
+
+    def train(self, inputs, target):
+        prediction = self.predict(inputs)
+        error = target - prediction
+        self.weights += self.learning_rate * error * inputs
+        self.bias += self.learning_rate * error
+
+# Ejemplo de uso
+inputs = np.array([1, 2])
+target = 0
+perceptron = Perceptron(input_size=len(inputs))
+
+for _ in range(10):
+    perceptron.train(inputs, target)
+    print(perceptron.predict(inputs))
+
+ADALINE:
+
+class Adaline:
+    def __init__(self, input_size, learning_rate=0.1):
+        self.weights = np.zeros(input_size)
+        self.bias = 0
+        self.learning_rate = learning_rate
+
+    def predict(self, inputs):
+        return np.dot(inputs, self.weights) + self.bias
+
+    def train(self, inputs, target):
+        prediction = self.predict(inputs)
+        error = target - prediction
+        self.weights += 2 * self.learning_rate * error * inputs
+        self.bias += 2 * self.learning_rate * error
+
+# Ejemplo de uso
+inputs = np.array([1, 2])
+target = 0
+adaline = Adaline(input_size=len(inputs))
+
+for _ in range(10):
+    adaline.train(inputs, target)
+    print(adaline.predict(inputs))
+
+MADALINE:
+class Madaline:
+    def __init__(self, input_size, output_size, learning_rate=0.1):
+        self.weights = np.zeros((output_size, input_size))
+        self.bias = np.zeros(output_size)
+        self.learning_rate = learning_rate
+
+    def predict(self, inputs):
+        return np.dot(self.weights, inputs) + self.bias
+
+    def train(self, inputs, target):
+        predictions = self.predict(inputs)
+        errors = target - predictions
+        self.weights += 2 * self.learning_rate * np.outer(errors, inputs)
+        self.bias += 2 * self.learning_rate * errors
+
+# Ejemplo de uso
+inputs = np.array([1, 2])
+target = np.array([0, 1])
+madaline = Madaline(input_size=len(inputs), output_size=len(target))
+
+for _ in range(10):
+    madaline.train(inputs, target)
+    print(madaline.predict(inputs))
