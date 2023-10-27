@@ -1,0 +1,28 @@
+import tensorflow as tf
+import numpy as np
+
+# Datos de entrada y salida
+entradas = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+salidas = np.array([[0], [1], [1], [0]])
+
+# Definición del modelo
+modelo = tf.keras.Sequential([
+    tf.keras.layers.Dense(2, input_shape=(2,), activation='sigmoid'),
+    tf.keras.layers.Dense(1, activation='sigmoid')
+])
+
+# Compilación del modelo
+modelo.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
+
+# Entrenamiento del modelo
+modelo.fit(entradas, salidas, epochs=5000, verbose=0)
+
+# Evaluación del modelo
+puntuacion = modelo.evaluate(entradas, salidas)
+print("\nPrecisión del modelo: {:.2f}%".format(puntuacion[1] * 100))
+
+# Predicciones
+predicciones = modelo.predict(entradas)
+print("\nPredicciones:")
+for i in range(len(entradas)):
+    print("{} XOR {} = {:.2f}".format(entradas[i][0], entradas[i][1], predicciones[i][0]))
