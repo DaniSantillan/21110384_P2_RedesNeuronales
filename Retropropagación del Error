@@ -1,0 +1,64 @@
+import numpy as np
+
+# Función de activación sigmoidal
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+# Derivada de la función sigmoidal
+def sigmoid_derivative(x):
+    return x * (1 - x)
+
+# Conjunto de entrenamiento (entradas y salidas deseadas)
+inputs = np.array([[0, 0],
+                    [0, 1],
+                    [1, 0],
+                    [1, 1]])
+
+desired_output = np.array([[0],
+                           [1],
+                           [1],
+                           [0]])
+
+# Configuración de la red neuronal
+input_layer_neurons = 2
+hidden_layer_neurons = 3
+output_neurons = 1
+
+# Inicialización de pesos y sesgos de forma aleatoria
+hidden_weights = np.random.uniform(size=(input_layer_neurons, hidden_layer_neurons))
+hidden_bias = np.random.uniform(size=(1, hidden_layer_neurons))
+
+output_weights = np.random.uniform(size=(hidden_layer_neurons, output_neurons))
+output_bias = np.random.uniform(size=(1, output_neurons))
+
+# Parámetro de tasa de aprendizaje
+learning_rate = 0.1
+
+# Entrenamiento de la red neuronal mediante retropropagación del error
+for epoch in range(10000):
+    # Feedforward
+    hidden_layer_input = np.dot(inputs, hidden_weights)
+    hidden_layer_input += hidden_bias
+    hidden_layer_output = sigmoid(hidden_layer_input)
+
+    output_layer_input = np.dot(hidden_layer_output, output_weights)
+    output_layer_input += output_bias
+    predicted_output = sigmoid(output_layer_input)
+
+    # Cálculo del error
+    error = desired_output - predicted_output
+
+    # Retropropagación del error
+    output_error = error * sigmoid_derivative(predicted_output)
+    hidden_layer_error = output_error.dot(output_weights.T) * sigmoid_derivative(hidden_layer_output)
+
+    # Actualización de pesos y sesgos
+    output_weights += hidden_layer_output.T.dot(output_error) * learning_rate
+    output_bias += np.sum(output_error, axis=0, keepdims=True) * learning_rate
+
+    hidden_weights += inputs.T.dot(hidden_layer_error) * learning_rate
+    hidden_bias += np.sum(hidden_layer_error, axis=0, keepdims=True) * learning_rate
+
+# Imprimir el resultado final
+print("Después del entrenamiento:")
+print(predicted_output)
