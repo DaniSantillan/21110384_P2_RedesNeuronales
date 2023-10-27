@@ -1,0 +1,24 @@
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+
+# Datos de entrada y salida de ejemplo
+datos_entrada = [[0, 0], [0, 1], [1, 0], [1, 1]]
+datos_salida = [0, 1, 1, 0]
+
+# Crear el modelo de red neuronal
+modelo = Sequential()
+
+# Agregar capas a la red
+modelo.add(Dense(2, input_dim=2, activation='relu'))  # Capa oculta con 2 neuronas
+modelo.add(Dense(1, activation='sigmoid'))           # Capa de salida con 1 neurona
+
+# Compilar el modelo
+modelo.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+# Entrenar la red neuronal
+modelo.fit(datos_entrada, datos_salida, epochs=500, verbose=2)
+
+# Evaluar el modelo
+puntuacion = modelo.evaluate(datos_entrada, datos_salida)
+print("\nPrecisión del modelo: %.2f%%" % (puntuacion[1]*100))
